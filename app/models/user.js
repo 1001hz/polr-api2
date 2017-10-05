@@ -12,6 +12,12 @@ var LeagueSchema = new Schema({
     leagueId: { type: String }
 });
 
+var MediaSourceSchema = new Schema({
+    source: { type: String },
+    accessToken: { type: String },
+    refreshToken: { type: String }
+});
+
 var UserSchema = new Schema({
     email: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
@@ -20,7 +26,8 @@ var UserSchema = new Schema({
     fname: { type: String },
     lname: { type: String },
     avatar: AvatarSchema,
-    leagues: [LeagueSchema]
+    leagues: [LeagueSchema],
+    mediaSource: [MediaSourceSchema]
 });
 
 UserSchema.methods.updateFields = function (clientUser) {

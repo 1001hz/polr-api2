@@ -30,7 +30,7 @@ module.exports = {
 
 
     modify: function(league) {
-console.log(league._id);
+
         return League
             .findOne({ _id: league._id })
             .exec()
@@ -82,5 +82,16 @@ console.log(league._id);
                     });
             });
 
+    },
+
+    delete: function(leagueId) {
+
+        return League
+            .findOne({ _id: leagueId })
+            .remove()
+            .exec()
+            .then(function() {
+                return UserService.removeLeague(leagueId)
+            });
     }
 };

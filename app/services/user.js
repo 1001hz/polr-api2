@@ -9,6 +9,7 @@ module.exports = {
         return User.findOne({ token: token }).exec();
     },
 
+
     logout: function(userId) {
         return User
                 .findOne({ _id: userId })
@@ -121,6 +122,17 @@ module.exports = {
             });
     },
 
+
+    updateSpotifyTokens: function(userId, accessToken, refreshToken) {
+        return User
+            .findOne({ _id: userId })
+            .exec()
+            .then(function(aUser){
+                aUser.mediaSource.push({ accessToken : accessToken, refreshToken: refreshToken, source: 'spotify'});
+                return aUser.save();
+            });
+    },
+
     resetPassword: function(token, email, newPassword) {
         return new Promise(function(resolve, reject) {
             User
@@ -225,5 +237,15 @@ module.exports = {
                     throw({status: 422, message: "User doesn't exist"});
                 }
             });
+    },
+
+    removeLeague: function(leagueId) {
+        return User
+            .update(
+            {'leagues.leagueId': {$eq: leagueId}},
+            {$pull : { "leagues" : {"leagueId":leagueId} } },
+            {multi: true}
+            )
+            .exec();
     }
 };

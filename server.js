@@ -4,10 +4,11 @@ var mongoose = require('mongoose');
 
 var port = process.env.PORT||config.port;
 var app = express();
-var router = express.Router();
+var apiRouter = express.Router();
+var openRouter = express.Router();
 
-app = require('./app/middleware')(app, router);
-require('./app/routes')(router);
+app = require('./app/middleware')(app, apiRouter, openRouter);
+require('./app/routes')(apiRouter, openRouter);
 
 
 /*

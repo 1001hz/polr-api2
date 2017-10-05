@@ -60,6 +60,17 @@ module.exports = {
             .catch(function(error) {
                 return next(error);
             })
+    },
+
+    delete: function(req, res, next) {
+        leagueService
+            .delete(req.params.id)
+            .then(function(){
+                res.status(200).send({});
+            })
+            .catch(function(error) {
+                return next(error);
+            })
     }
 
 }

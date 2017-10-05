@@ -2,9 +2,20 @@ var api = require('./controllers/api');
 var user = require('./controllers/user');
 var auth = require('./controllers/auth');
 var league = require('./controllers/league');
+var spotify = require('./controllers/spotify');
 
-module.exports = function(router){
+module.exports = function(router, openRouter){
 
+    /**
+     * Open Callbacks
+     */
+    openRouter
+        .route('/spotify')
+        .get(spotify.spotifyCallback);
+
+    /**
+     * Boilerplate
+     */
     router
         .route('/')
         .get(api.getMessage);
@@ -21,47 +32,51 @@ module.exports = function(router){
      * Auth Section
      */
     router
-        .route('/api/login')
+        .route('/login')
         .post(auth.login);
 
     router
-        .route('/api/user/logout')
-        .get(auth.logout);
-
-    router
-        .route('/api/token-login')
+        .route('/login/token')
         .post(auth.tokenLogin);
 
     router
-        .route('/api/forgot-password')
+        .route('/logout')
+        .get(auth.logout);
+
+    router
+        .route('/password/forgot')
         .post(auth.forgotPassword);
 
     router
-        .route('/api/reset-password')
+        .route('/password/reset')
         .post(auth.resetPassword);
+
+    router
+        .route('/spotify/login')
+        .get(spotify.login);
 
     /**
      * User Section
      */
 
     router
-        .route('/api/user/:id')
+        .route('/user/:id')
         .get(user.findById);
 
     router
-        .route('/api/open/user')
+        .route('/user')
         .post(user.create);
 
     router
-        .route('/api/user')
-        .post(user.update);
+        .route('/user')
+        .patch(user.update);
 
     router
-        .route('/api/user/password')
-        .post(user.updatePassword);
+        .route('/user/password')
+        .put(user.updatePassword);
 
     router
-        .route('/api/user/avatar')
+        .route('/user/avatar')
         .post(user.updateAvatar);
 
     /**
@@ -69,23 +84,27 @@ module.exports = function(router){
      */
 
     router
-        .route('/api/league/:id')
+        .route('/league/:id')
         .get(league.findById);
 
     router
-        .route('/api/league')
+        .route('/league')
         .post(league.create);
 
     router
-        .route('/api/leagues')
+        .route('/leagues')
         .get(league.fetch);
 
     router
-        .route('/api/league')
+        .route('/league')
         .put(league.modify);
 
     router
-        .route('/api/league/join')
+        .route('/league/join')
         .post(league.joinLeague);
+
+    router
+        .route('/league/:id')
+        .delete(league.delete);
 
 }
